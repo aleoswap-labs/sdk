@@ -15,6 +15,25 @@ enum Errors {
     ErrInTruncation,
 }
 
+impl Errors {
+    fn to_string(&self) -> String {
+        match self {
+            Self::ErrParseFromJsonString => String::from("error: parse from json string"),
+            Self::ErrHashBhp256 => String::from("error: hash with bph256"),
+            Self::ErrHashToGroupBhp256 => String::from("error: hash to group with bhp256"),
+            Self::ErrGroupToLiteral => String::from("error: group to literal"),
+            Self::ErrLiteralToU128 => String::from("error: literal to u128"),
+            Self::ErrNoDotInTruncation => String::from("error: no dot in truncation"),
+            Self::ErrInTruncation => String::from("error: truncation"),
+        }
+    }
+}
+
+fn main() {
+    let a = Errors::ErrParseFromJsonString;
+    println!("{}", a.to_string());
+}
+
 fn bhp256_hash_to_field(data: &str) -> Result<String, Errors> {
     let v = Value::<TestnetV0>::from_str(data).map_err(|_| Errors::ErrParseFromJsonString)?;
     Ok(TestnetV0::hash_bhp256(&v.to_bits_le()).map_err(|_| Errors::ErrHashBhp256)?.to_string())
@@ -36,12 +55,12 @@ mod tests {
 
     #[test]
     fn test_bhp256_hash_to_field() {
-        let input_msg =  "{base:aleo1qdtufktf3xj78qdxh9s9jerelrmjukt7rn5l04nx8nhr7k8spcpsyf9eye,creator:aleo1qdtufktf3xj78qdxh9s9jerelrmjukt7rn5l04nx8nhr7k8spcpsyf9eye,salt:1u128}";
+        let input_msg = "{base:aleo1qdtufktf3xj78qdxh9s9jerelrmjukt7rn5l04nx8nhr7k8spcpsyf9eye,creator:aleo1qdtufktf3xj78qdxh9s9jerelrmjukt7rn5l04nx8nhr7k8spcpsyf9eye,salt:1u128}";
         let expect_field_string =
             "2898017615106732785313906870732724998551332966063696887058209753231147472995field".to_owned();
         assert_eq!(bhp256_hash_to_field(input_msg), Ok(expect_field_string));
 
-        let invalid_msg =  "base:aleo1qdtufktf3xj78qdxh9s9jerelrmjukt7rn5l04nx8nhr7k8spcpsyf9eye,creator:aleo1qdtufktf3xj78qdxh9s9jerelrmjukt7rn5l04nx8nhr7k8spcpsyf9eye,salt:1u128}";
+        let invalid_msg = "base:aleo1qdtufktf3xj78qdxh9s9jerelrmjukt7rn5l04nx8nhr7k8spcpsyf9eye,creator:aleo1qdtufktf3xj78qdxh9s9jerelrmjukt7rn5l04nx8nhr7k8spcpsyf9eye,salt:1u128}";
         assert_eq!(bhp256_hash_to_field(invalid_msg), Err(Errors::ErrParseFromJsonString));
     }
 
