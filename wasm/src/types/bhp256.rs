@@ -39,16 +39,19 @@ impl Bhp256 {
     #[wasm_bindgen(js_name = "hashToFieldString")]
     pub fn hash_to_field_string(data: &str) -> Result<String, String> {
         let v = Value::<TestnetV0>::from_str(data).map_err(|_| Errors::ErrParseFromJsonString.to_string())?;
-    Ok(TestnetV0::hash_bhp256(&v.to_bits_le()).map_err(|_| Errors::ErrHashBhp256.to_string())?.to_string())
+        Ok(TestnetV0::hash_bhp256(&v.to_bits_le()).map_err(|_| Errors::ErrHashBhp256.to_string())?.to_string())
     }
 
     #[wasm_bindgen(js_name = "hashToU128String")]
     pub fn hash_to_u128_string(data: &str) -> Result<String, String> {
         let v = Value::<TestnetV0>::from_str(data).map_err(|_| Errors::ErrParseFromJsonString.to_string())?;
-        let group = TestnetV0::hash_to_group_bhp256(&v.to_bits_le()).map_err(|_| Errors::ErrHashToGroupBhp256.to_string())?;
-        let literal = Literal::<AleoV0>::from_str(&group.to_string()).map_err(|_| Errors::ErrGroupToLitera.to_string()l)?;
-    
-        let truncation = literal.cast_lossy(LiteralType::U128).map_err(|_| Errors::ErrLiteralToU128.to_string())?.to_string();
+        let group =
+            TestnetV0::hash_to_group_bhp256(&v.to_bits_le()).map_err(|_| Errors::ErrHashToGroupBhp256.to_string())?;
+        let literal =
+            Literal::<AleoV0>::from_str(&group.to_string()).map_err(|_| Errors::ErrGroupToLitera.to_string())?;
+
+        let truncation =
+            literal.cast_lossy(LiteralType::U128).map_err(|_| Errors::ErrLiteralToU128.to_string())?.to_string();
         let index = truncation.find('.').ok_or(Errors::ErrNoDotInTruncation.to_string())?;
         Ok(truncation.get(0..index).ok_or(Errors::ErrInTruncation.to_string())?.to_string())
     }
