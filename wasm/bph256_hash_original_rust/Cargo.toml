@@ -1,0 +1,10 @@
+[package]
+name = "bph256_hash_original_rust"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+snarkvm-console-program = { git = "https://github.com/AleoNet/snarkVM", rev = "43e681f4588129a4564debc1af526855787b11a8" }
+snarkvm-console-network = { git = "https://github.com/AleoNet/snarkVM", rev = "43e681f4588129a4564debc1af526855787b11a8" }
+snarkvm-circuit-program = { git = "https://github.com/AleoNet/snarkVM", rev = "43e681f4588129a4564debc1af526855787b11a8" }
+snarkvm = { git = "https://github.com/AleoNet/snarkVM", rev = "43e681f4588129a4564debc1af526855787b11a8" }
