@@ -17,4 +17,7 @@
 pub mod field;
 pub use field::*;
 
+pub mod bhp256;
+pub use bhp256::*;
+
 pub(crate) mod native;
