@@ -250,7 +250,7 @@ async function build(network) {
 
 const networks = [
     "testnet",
-    "mainnet",
+    // "mainnet",
 ];
 
 await Promise.all(networks.map(build));
