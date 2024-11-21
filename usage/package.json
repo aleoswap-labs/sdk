@@ -6,5 +6,8 @@
   "scripts": {
     "start": "node index.js"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "sdk": "file:../sdk"
+  }
 }

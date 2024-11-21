@@ -4,7 +4,7 @@ import $package from "./package.json" with { type: "json" };
 
 const networks = [
     "testnet",
-    "mainnet",
+    // "mainnet",
 ];
 
 export default networks.map((network) => {

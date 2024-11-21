@@ -1,6 +1,6 @@
 
 // import {PrivateKey} from "../sdk/dist/testnet/wasm.js";
-import { Account } from "../sdk/dist/testnet/node.js";
+import { Account } from "sdk";
 
 
 const account = new Account();
