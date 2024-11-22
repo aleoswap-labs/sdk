@@ -6,8 +6,10 @@
   "scripts": {
     "start": "node index.js",
     "account": "node account.js",
-    "client": "node aleo_network_client.js"
-
+    "client": "node aleo_network_client.js",
+    "local_execution": "node local_execution.js",
+    "deploy": "node deploy_program.js",
+    "transfer_aleo": "node transfer_aleo.js"
   },
   "license": "MIT",
   "dependencies": {
