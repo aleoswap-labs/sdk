@@ -9,7 +9,8 @@
     "client": "node aleo_network_client.js",
     "local_execution": "node local_execution.js",
     "deploy": "node deploy_program.js",
-    "transfer_aleo": "node transfer_aleo.js"
+    "transfer_aleo": "node transfer_aleo.js",
+    "execute_function": "node execute_function.js"
   },
   "license": "MIT",
   "dependencies": {
