@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
-    "account": "node account.js"
+    "account": "node account.js",
+    "client": "node aleo_network_client.js"
+
   },
   "license": "MIT",
   "dependencies": {
