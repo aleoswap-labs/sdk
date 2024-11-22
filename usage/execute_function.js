@@ -1,5 +1,6 @@
-import { Account, ProgramManager, AleoNetworkClient, AleoKeyProvider, NetworkRecordProvider } from "sdk";
+import { Account, ProgramManager, AleoNetworkClient, AleoKeyProvider, NetworkRecordProvider, initThreadPool } from "sdk";
 
+await initThreadPool()
 
 const privateKey = 'APrivateKey1zkp2mYusCV1g2GTYJ1DeUUa4Twgc5Vqh59jYnajJv3Foskv'
 const account = new Account({ privateKey });
