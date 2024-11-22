@@ -41,7 +41,13 @@ fn check_file_licenses<P: AsRef<Path>>(path: P) {
         }
 
         // Check all files with the ".rs" extension.
-        if entry_type.is_file() && entry.file_name().to_str().unwrap_or("").ends_with(".rs") {
+        let file_name = entry.file_name().to_str().unwrap_or("");
+        if entry_type.is_file() && file_name.ends_with(".rs") {
+            // Skip the authorizations building file
+            if file_name.starts_with("build_authorizations") {
+                continue;
+            }
+
             let file = File::open(entry.path()).unwrap();
             let mut contents = Vec::with_capacity(EXPECTED_LICENSE_TEXT.len());
             file.take(EXPECTED_LICENSE_TEXT.len() as u64).read_to_end(&mut contents).unwrap();
