@@ -47,7 +47,7 @@
   },
   "homepage": "https://github.com/ProvableHQ/sdk#readme",
   "dependencies": {
-    "localwasm": "file:../wasm",
+    "@provablehq/wasm": "^0.7.0",
     "comlink": "^4.4.1",
     "mime": "^3.0.0",
     "sync-request": "^6.1.0"

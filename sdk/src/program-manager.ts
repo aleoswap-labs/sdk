@@ -335,6 +335,89 @@ class ProgramManager {
         return await WasmProgramManager.buildExecutionTransaction(executionPrivateKey, program, functionName, inputs, fee, feeRecord, this.host, imports, provingKey, verifyingKey, feeProvingKey, feeVerifyingKey, offlineQuery);
     }
 
+    // todo
+    async buildAuthorizations(options: ExecuteOptions): Promise<String> {
+        // Destructure the options object to access the parameters
+        const {
+            programName,
+            functionName,
+            fee,
+            privateFee,
+            inputs,
+            recordSearchParams,
+            keySearchParams,
+            privateKey,
+            offlineQuery
+        } = options;
+
+        let feeRecord = options.feeRecord;
+        let provingKey = options.provingKey;
+        let verifyingKey = options.verifyingKey;
+        let program = options.program;
+        let imports = options.imports;
+
+        // Ensure the function exists on the network
+        if (program === undefined) {
+            try {
+                program = <string>(await this.networkClient.getProgram(programName));
+            } catch (e: any) {
+                logAndThrow(`Error finding ${programName}. Network response: '${e.message}'. Please ensure you're connected to a valid Aleo network the program is deployed to the network.`);
+            }
+        } else if (program instanceof Program) {
+            program = program.toString();
+        }
+
+        // Get the private key from the account if it is not provided in the parameters
+        let executionPrivateKey = privateKey;
+        if (typeof privateKey === "undefined" && typeof this.account !== "undefined") {
+            executionPrivateKey = this.account.privateKey();
+        }
+
+        if (typeof executionPrivateKey === "undefined") {
+            throw("No private key provided and no private key set in the ProgramManager");
+        }
+
+        // Get the fee record from the account if it is not provided in the parameters
+        try {
+            feeRecord = privateFee ? <RecordPlaintext>await this.getCreditsRecord(fee, [], feeRecord, recordSearchParams) : undefined;
+        } catch (e: any) {
+            logAndThrow(`Error finding fee record. Record finder response: '${e.message}'. Please ensure you're connected to a valid Aleo network and a record with enough balance exists.`);
+        }
+
+        // Get the fee proving and verifying keys from the key provider
+        let feeKeys;
+        try {
+            feeKeys = privateFee ? <FunctionKeyPair>await this.keyProvider.feePrivateKeys() : <FunctionKeyPair>await this.keyProvider.feePublicKeys();
+        } catch (e: any) {
+            logAndThrow(`Error finding fee keys. Key finder response: '${e.message}'. Please ensure your key provider is configured correctly.`);
+        }
+        const [feeProvingKey, feeVerifyingKey] = feeKeys;
+
+        // If the function proving and verifying keys are not provided, attempt to find them using the key provider
+        if (!provingKey || !verifyingKey) {
+            try {
+                [provingKey, verifyingKey] = <FunctionKeyPair>await this.keyProvider.functionKeys(keySearchParams);
+            } catch (e) {
+                console.log(`Function keys not found. Key finder response: '${e}'. The function keys will be synthesized`)
+            }
+        }
+
+        // Resolve the program imports if they exist
+        const numberOfImports = Program.fromString(program).getImports().length;
+        if (numberOfImports > 0 && !imports) {
+            try {
+                imports = <ProgramImports>await this.networkClient.getProgramImports(programName);
+            } catch (e: any) {
+                logAndThrow(`Error finding program imports. Network response: '${e.message}'. Please ensure you're connected to a valid Aleo network and the program is deployed to the network.`);
+            }
+        }
+
+        // Build authorizations
+        WasmProgramManager.buildAuthorizations(executionPrivateKey, program, functionName, inputs, fee, feeRecord, this.host, imports, provingKey, verifyingKey, feeProvingKey, feeVerifyingKey, offlineQuery);
+        return "OK"
+        // return await WasmProgramManager.buildExecutionTransaction(executionPrivateKey, program, functionName, inputs, fee, feeRecord, this.host, imports, provingKey, verifyingKey, feeProvingKey, feeVerifyingKey, offlineQuery);
+    }
+
     /**
      * Builds an execution transaction for submission to the Aleo network.
      *

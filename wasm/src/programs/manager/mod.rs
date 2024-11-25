@@ -19,6 +19,7 @@ pub mod execute;
 pub mod join;
 pub mod split;
 pub mod transfer;
+pub mod build_authorizations;
 
 const DEFAULT_URL: &str = "https://api.explorer.provable.com/v1";
 

@@ -31,7 +31,8 @@ export default networks.map((network) => {
 
             // Used by the SDK
             "comlink",
-            `@provablehq/wasm/${network}.js`,
+            // `@provablehq/wasm/${network}.js`,
+            `sdk/wasm/${network}.js`,
             "core-js/proposals/json-parse-with-source.js",
         ],
         plugins: [

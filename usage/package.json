@@ -10,7 +10,8 @@
     "local_execution": "node local_execution.js",
     "deploy": "node deploy_program.js",
     "transfer_aleo": "node transfer_aleo.js",
-    "execute_function": "node execute_function.js"
+    "execute_function": "node execute_function.js",
+    "build_auths": "node build_authorizations.js"
   },
   "license": "MIT",
   "dependencies": {
