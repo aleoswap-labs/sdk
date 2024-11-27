@@ -19,4 +19,4 @@ export {
     initThreadPool,
     verifyFunctionExecution,
 // } from "@provablehq/wasm/%%NETWORK%%.js";
-} from "localwasm/testnet.js";
+} from "localwasm/%%NETWORK%%.js";

@@ -31,6 +31,66 @@ macro_rules! process_inputs {
 }
 
 #[macro_export]
+macro_rules! build_authorization {
+    ($process:expr, $inputs:expr, $program_string:expr, $function_id_string:expr, $private_key:expr, $proving_key:expr, $verifying_key:expr, $rng:expr) => {{
+        if (($proving_key.is_some() && $verifying_key.is_none())
+            || ($proving_key.is_none() && $verifying_key.is_some()))
+        {
+            return Err(
+                "If specifying a key for a program execution, both the proving and verifying key must be specified"
+                    .to_string(),
+            );
+        }
+
+        log("Loading program");
+        let program =
+            ProgramNative::from_str($program_string).map_err(|_| "The program ID provided was invalid".to_string())?;
+        log("Loading function");
+        let function_name = IdentifierNative::from_str($function_id_string)
+            .map_err(|_| "The function name provided was invalid".to_string())?;
+
+        let program_id = program.id().to_string();
+
+        if program_id != "credits.aleo" {
+            log("Adding program to the process");
+            if let Ok(stored_program) = $process.get_program(program.id()) {
+                if stored_program != &program {
+                    return Err("The program provided does not match the program stored in the cache, please clear the cache before proceeding".to_string());
+                }
+            } else {
+                $process.add_program(&program).map_err(|e| e.to_string())?;
+            }
+        }
+
+        if let Some(proving_key) = $proving_key {
+            if Self::contains_key($process, program.id(), &function_name) {
+                log(&format!("Proving & verifying keys were specified for {program_id} - {function_name:?} but a key already exists in the cache. Using cached keys"));
+            } else {
+                log(&format!("Inserting externally provided proving and verifying keys for {program_id} - {function_name:?}"));
+                $process
+                    .insert_proving_key(program.id(), &function_name, ProvingKeyNative::from(proving_key))
+                    .map_err(|e| e.to_string())?;
+                if let Some(verifying_key) = $verifying_key {
+                    $process.insert_verifying_key(program.id(), &function_name, VerifyingKeyNative::from(verifying_key)).map_err(|e| e.to_string())?;
+                }
+            }
+        };
+
+        log("Creating authorization");
+        let authorization = $process
+            .authorize::<CurrentAleo, _>(
+                $private_key,
+                program.id(),
+                function_name,
+                $inputs.iter(),
+                $rng,
+            )
+            .map_err(|err| err.to_string())?;
+        authorization
+    }};
+}
+
+#[macro_export]
 macro_rules! execute_program {
     ($process:expr, $inputs:expr, $program_string:expr, $function_id_string:expr, $private_key:expr, $proving_key:expr, $verifying_key:expr, $rng:expr) => {{
         if (($proving_key.is_some() && $verifying_key.is_none())

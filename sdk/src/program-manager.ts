@@ -413,8 +413,8 @@ class ProgramManager {
         }
 
         // Build authorizations
-        WasmProgramManager.buildAuthorizations(executionPrivateKey, program, functionName, inputs, fee, feeRecord, this.host, imports, provingKey, verifyingKey, feeProvingKey, feeVerifyingKey, offlineQuery);
-        return "OK"
+        return await WasmProgramManager.buildAuthorizations(executionPrivateKey, program, functionName, inputs, fee, this.host, imports, provingKey, verifyingKey, feeProvingKey, feeVerifyingKey, offlineQuery);
+ 
         // return await WasmProgramManager.buildExecutionTransaction(executionPrivateKey, program, functionName, inputs, fee, feeRecord, this.host, imports, provingKey, verifyingKey, feeProvingKey, feeVerifyingKey, offlineQuery);
     }
 
