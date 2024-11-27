@@ -350,9 +350,9 @@ class ProgramManager {
             offlineQuery
         } = options;
 
-        let feeRecord = options.feeRecord;
-        let provingKey = options.provingKey;
-        let verifyingKey = options.verifyingKey;
+        // let feeRecord = options.feeRecord;
+        // let provingKey = options.provingKey;
+        // let verifyingKey = options.verifyingKey;
         let program = options.program;
         let imports = options.imports;
 
