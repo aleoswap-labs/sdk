@@ -22,29 +22,13 @@ const fee = 0.08133
 const keySearchParams = { cacheKey: `${program_id}:${function_name}` };
 console.log("Key search parameters set: ", keySearchParams);
 
-console.log("build auths")
-
-let res = await programManager.buildAuthorizations({
+let authorizations_json = await programManager.buildAuthorizations({
     programName: program_id,
     functionName: function_name,
     fee: fee,
-    privateFee: false, // Assuming a value for privateFee
+    privateFee: false,
     inputs: ["9u64"], // Inputs matching the function definition
     keySearchParams: keySearchParams,
 });
 
-console.log(`result: ${res}`)
-
-
-
-// // Create a temporary account for the execution of the program
-// const account = new Account();
-// programManager.setAccount(account);
-
-// const functionName = "test_add"
-// const inputs = ["1u32", "1024u32"]
-// // Get the response and ensure that the program executed correctly
-// const executionResponse = await programManager.run(programCode, functionName, inputs);
-// const result = executionResponse.getOutputs();
-// console.log(`result:
-//     ${result}`)
+console.log(`result: ${authorizations_json}`)
