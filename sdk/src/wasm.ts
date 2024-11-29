@@ -18,5 +18,4 @@ export {
     ViewKey,
     initThreadPool,
     verifyFunctionExecution,
-// } from "@provablehq/wasm/%%NETWORK%%.js";
-} from "localwasm/%%NETWORK%%.js";
+} from "@zenox-labs/wasm/%%NETWORK%%.js";

@@ -1,6 +1,7 @@
 {
-  "name": "@provablehq/sdk",
-  "version": "0.7.0",
+  "name": "@zenox-labs/sdk",
+  "version": "0.0.1",
+  "author": "Michael.W",
   "description": "A Software Development Kit (SDK) for Zero-Knowledge Transactions",
   "collaborators": [
     "The Provable Team"
@@ -34,7 +35,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ProvableHQ/sdk.git"
+    "url": "git+https://github.com/aleoswap-labs/sdk.git"
   },
   "keywords": [
     "Aleo",
@@ -43,11 +44,11 @@
     "ZK"
   ],
   "bugs": {
-    "url": "https://github.com/ProvableHQ/sdk/issues"
+    "url": "https://github.com/aleoswap-labs/sdk/issues"
   },
-  "homepage": "https://github.com/ProvableHQ/sdk#readme",
+  "homepage": "https://github.com/aleoswap-labs/sdk#readme",
   "dependencies": {
-    "localwasm": "file:../wasm",
+    "@zenox-labs/wasm": "0.0.1",
     "comlink": "^4.4.1",
     "mime": "^3.0.0",
     "sync-request": "^6.1.0"
