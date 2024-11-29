@@ -335,14 +335,13 @@ class ProgramManager {
         return await WasmProgramManager.buildExecutionTransaction(executionPrivateKey, program, functionName, inputs, fee, feeRecord, this.host, imports, provingKey, verifyingKey, feeProvingKey, feeVerifyingKey, offlineQuery);
     }
 
-    // todo
+    // Build authorization and public fee authorization for an execute
     async buildAuthorizations(options: ExecuteOptions): Promise<String> {
         // Destructure the options object to access the parameters
         const {
             functionName,
             fee,
             inputs,
-            privateKey,
         } = options;
 
         let program = options.program;
@@ -355,18 +354,17 @@ class ProgramManager {
             logAndThrow(`Error invalid program object. Not an instanceof Program`);
         }
 
-        let executionPrivateKey = privateKey;
-        if (typeof privateKey === "undefined" && typeof this.account !== "undefined") {
-            executionPrivateKey = this.account.privateKey();
-        }
-
-        if (typeof executionPrivateKey === "undefined") {
-            throw ("No private key provided and no private key set in the ProgramManager");
+        // Get the private key from account
+        let privateKey;
+        if (this.account instanceof Account) {
+            privateKey = this.account.privateKey();
+        } else {
+            logAndThrow(`Error account object. Not an instanceof Account`);
         }
 
         // Build authorizations
         return await WasmProgramManager.buildAuthorizations(
-            executionPrivateKey,
+            privateKey,
             program,
             functionName,
             inputs,

@@ -1,39 +1,40 @@
-import { Account, ProgramManager, AleoNetworkClient, AleoKeyProvider, NetworkRecordProvider, initThreadPool } from "sdk";
+import { Account, ProgramManager, AleoNetworkClient, initThreadPool } from "sdk";
+
+const privateKey = 'APrivateKey1zkp2mYusCV1g2GTYJ1DeUUa4Twgc5Vqh59jYnajJv3Foskv'
+const queryURL = "http://hk2-6.s.filfox.io:60053"
+// const programId = "son_program.aleo"
+// const functionName = "call_father"
+// const programId = "father_program.aleo"
+// const functionName = "father_here"
+const programId = "credits.aleo"
+const functionName = "transfer_public"
+const inputs =  ["aleo1qdtufktf3xj78qdxh9s9jerelrmjukt7rn5l04nx8nhr7k8spcpsyf9eye","1u64"];
+const fee = 0.08132
 
 await initThreadPool()
 
-const privateKey = 'APrivateKey1zkp2mYusCV1g2GTYJ1DeUUa4Twgc5Vqh59jYnajJv3Foskv'
 const account = new Account({ privateKey });
 console.log(`account address: ${account.address().to_string()}`)
 
-const queryURL = "http://hk2-6.s.filfox.io:60053"
 const networkClient = new AleoNetworkClient(queryURL)
-
 const programManager = new ProgramManager(queryURL);
 programManager.setAccount(account)
 
-const programId = "son_program.aleo"
-const functionName = "call_father"
-const fee = 0.08133
-
-// get program
+// Get program
 const program = await networkClient.getProgramObject(programId)
 
-// get program imports
+// Get program imports
 let importPrograms;
 if (program.getImports().length > 0) {
     importPrograms = await networkClient.getProgramImports(programId)
 }
-
-
-
-
+// Build anthorization and public fee authorization in json
 let authorizations_json = await programManager.buildAuthorizations({
-    program: program,
+    program,
     imports: importPrograms,
-    functionName: functionName,
-    fee: fee,
-    inputs: ["3u64"], // Inputs matching the function definition
+    functionName,
+    fee,
+    inputs,
 });
 
 console.log(`result: ${authorizations_json}`)
