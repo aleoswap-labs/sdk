@@ -1,9 +1,10 @@
 {
-  "name": "@provablehq/wasm",
-  "version": "0.7.0",
+  "name": "@zenox-labs/wasm",
+  "version": "0.0.1",
+  "author": "Michael.W",
   "description": "Wasm build for the SDK",
   "collaborators": [
-    "The Provable Team"
+    "The Aleoswap Team"
   ],
   "license": "GPL-3.0",
   "type": "module",
@@ -25,7 +26,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ProvableHQ/sdk.git"
+    "url": "git+https://github.com/aleoswap-labs/sdk.git"
   },
   "keywords": [
     "Aleo",
@@ -34,9 +35,9 @@
     "ZK"
   ],
   "bugs": {
-    "url": "https://github.com/ProvableHQ/sdk/issues"
+    "url": "https://github.com/aleoswap-labs/sdk/issues"
   },
-  "homepage": "https://github.com/ProvableHQ/sdk#readme",
+  "homepage": "https://github.com/aleoswap-labs/sdk#readme",
   "scripts": {
     "build": "rimraf dist && node build.js",
     "test": "node test.js"
