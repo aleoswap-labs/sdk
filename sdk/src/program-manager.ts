@@ -196,7 +196,7 @@ class ProgramManager {
         }
 
         if (typeof deploymentPrivateKey === "undefined") {
-            throw("No private key provided and no private key set in the ProgramManager");
+            throw ("No private key provided and no private key set in the ProgramManager");
         }
 
         // Get the fee record from the account if it is not provided in the parameters
@@ -293,7 +293,7 @@ class ProgramManager {
         }
 
         if (typeof executionPrivateKey === "undefined") {
-            throw("No private key provided and no private key set in the ProgramManager");
+            throw ("No private key provided and no private key set in the ProgramManager");
         }
 
         // Get the fee record from the account if it is not provided in the parameters
@@ -342,17 +342,10 @@ class ProgramManager {
             programName,
             functionName,
             fee,
-            privateFee,
             inputs,
-            recordSearchParams,
-            keySearchParams,
             privateKey,
-            offlineQuery
         } = options;
 
-        // let feeRecord = options.feeRecord;
-        // let provingKey = options.provingKey;
-        // let verifyingKey = options.verifyingKey;
         let program = options.program;
         let imports = options.imports;
 
@@ -367,39 +360,13 @@ class ProgramManager {
             program = program.toString();
         }
 
-        // Get the private key from the account if it is not provided in the parameters
         let executionPrivateKey = privateKey;
         if (typeof privateKey === "undefined" && typeof this.account !== "undefined") {
             executionPrivateKey = this.account.privateKey();
         }
 
         if (typeof executionPrivateKey === "undefined") {
-            throw("No private key provided and no private key set in the ProgramManager");
-        }
-
-        // Get the fee record from the account if it is not provided in the parameters
-        try {
-            feeRecord = privateFee ? <RecordPlaintext>await this.getCreditsRecord(fee, [], feeRecord, recordSearchParams) : undefined;
-        } catch (e: any) {
-            logAndThrow(`Error finding fee record. Record finder response: '${e.message}'. Please ensure you're connected to a valid Aleo network and a record with enough balance exists.`);
-        }
-
-        // Get the fee proving and verifying keys from the key provider
-        let feeKeys;
-        try {
-            feeKeys = privateFee ? <FunctionKeyPair>await this.keyProvider.feePrivateKeys() : <FunctionKeyPair>await this.keyProvider.feePublicKeys();
-        } catch (e: any) {
-            logAndThrow(`Error finding fee keys. Key finder response: '${e.message}'. Please ensure your key provider is configured correctly.`);
-        }
-        const [feeProvingKey, feeVerifyingKey] = feeKeys;
-
-        // If the function proving and verifying keys are not provided, attempt to find them using the key provider
-        if (!provingKey || !verifyingKey) {
-            try {
-                [provingKey, verifyingKey] = <FunctionKeyPair>await this.keyProvider.functionKeys(keySearchParams);
-            } catch (e) {
-                console.log(`Function keys not found. Key finder response: '${e}'. The function keys will be synthesized`)
-            }
+            throw ("No private key provided and no private key set in the ProgramManager");
         }
 
         // Resolve the program imports if they exist
@@ -413,9 +380,14 @@ class ProgramManager {
         }
 
         // Build authorizations
-        return await WasmProgramManager.buildAuthorizations(executionPrivateKey, program, functionName, inputs, fee, this.host, imports, provingKey, verifyingKey, feeProvingKey, feeVerifyingKey, offlineQuery);
- 
-        // return await WasmProgramManager.buildExecutionTransaction(executionPrivateKey, program, functionName, inputs, fee, feeRecord, this.host, imports, provingKey, verifyingKey, feeProvingKey, feeVerifyingKey, offlineQuery);
+        return await WasmProgramManager.buildAuthorizations(
+            executionPrivateKey,
+            program,
+            functionName,
+            inputs,
+            fee,
+            imports
+        );
     }
 
     /**
@@ -502,7 +474,7 @@ class ProgramManager {
         }
 
         if (typeof executionPrivateKey === "undefined") {
-            throw("No private key provided and no private key set in the ProgramManager");
+            throw ("No private key provided and no private key set in the ProgramManager");
         }
 
         // If the function proving and verifying keys are not provided, attempt to find them using the key provider
@@ -552,7 +524,7 @@ class ProgramManager {
         }
 
         if (typeof executionPrivateKey === "undefined") {
-            throw("No private key provided and no private key set in the ProgramManager");
+            throw ("No private key provided and no private key set in the ProgramManager");
         }
 
         // Get the proving and verifying keys from the key provider
@@ -617,7 +589,7 @@ class ProgramManager {
         }
 
         if (typeof executionPrivateKey === "undefined") {
-            throw("No private key provided and no private key set in the ProgramManager");
+            throw ("No private key provided and no private key set in the ProgramManager");
         }
 
         // Get the split keys from the key provider
@@ -736,7 +708,7 @@ class ProgramManager {
         }
 
         if (typeof executionPrivateKey === "undefined") {
-            throw("No private key provided and no private key set in the ProgramManager");
+            throw ("No private key provided and no private key set in the ProgramManager");
         }
 
         // Get the proving and verifying keys from the key provider
@@ -954,7 +926,7 @@ class ProgramManager {
      * @param {number} amount The amount of credits to bond
      * @param {Options} options Options for the execution
      */
-    async bondPublic(staker_address: string, validator_address: string, withdrawal_address:string, amount: number, options: Partial<ExecuteOptions> = {}) {
+    async bondPublic(staker_address: string, validator_address: string, withdrawal_address: string, amount: number, options: Partial<ExecuteOptions> = {}) {
         const tx = <Transaction>await this.buildBondPublicTransaction(staker_address, validator_address, withdrawal_address, amount, options);
         return await this.networkClient.submitTransaction(tx);
     }
@@ -1314,7 +1286,7 @@ class ProgramManager {
             const program = executionResponse.getProgram();
             const verifyingKey = executionResponse.getVerifyingKey();
             return verifyFunctionExecution(execution, verifyingKey, program, function_id);
-        } catch(e) {
+        } catch (e) {
             console.warn("The execution was not found in the response, cannot verify the execution");
             return false;
         }

@@ -1,16 +1,15 @@
-use super::{wasm_bindgen, ProcessNative, ProgramManager, ProgramNative, ProvingKey, VerifyingKey, DEFAULT_URL};
+use super::{wasm_bindgen, ProcessNative, ProgramManager, ProgramNative};
 use crate::{
     build_authorization,
+    build_public_fee_authorization,
     log,
     process_inputs,
-    types::native::{CurrentAleo, IdentifierNative, ProvingKeyNative, VerifyingKeyNative},
-    OfflineQuery,
+    types::native::{CurrentAleo, IdentifierNative},
     PrivateKey,
 };
 
 use js_sys::{Array, Object};
 use rand::{rngs::StdRng, SeedableRng};
-use snarkvm_synthesizer::Authorization;
 use std::str::FromStr;
 
 #[wasm_bindgen]
@@ -24,20 +23,15 @@ impl ProgramManager {
         inputs: Array,
         fee_credits: f64,
         // fee_record: Option<RecordPlaintext>,
-        url: Option<String>,
+        // url: Option<String>,
         imports: Option<Object>,
-        proving_key: Option<ProvingKey>,
-        verifying_key: Option<VerifyingKey>,
-        fee_proving_key: Option<ProvingKey>,
-        fee_verifying_key: Option<VerifyingKey>,
-        offline_query: Option<OfflineQuery>,
+        // proving_key: Option<ProvingKey>,
+        // verifying_key: Option<VerifyingKey>,
+        // fee_proving_key: Option<ProvingKey>,
+        // fee_verifying_key: Option<VerifyingKey>,
+        // offline_query: Option<OfflineQuery>,
     ) -> Result<String, String> {
         log(&format!("Build authorization for function: {function}"));
-        // log("enter wasm.ProgramManger.build_authorizations()");
-        // let fee_microcredits = match &fee_record {
-        //     Some(fee_record) => Self::validate_amount(fee_credits, fee_record, true)?,
-        //     None => (fee_credits * 1_000_000.0) as u64,
-        // };
         let fee_microcredits = (fee_credits * 1_000_000.0) as u64;
         let mut process_native = ProcessNative::load_web().map_err(|err| err.to_string())?;
         let process = &mut process_native;
@@ -55,12 +49,27 @@ impl ProgramManager {
             program,
             function,
             private_key,
-            proving_key,
-            verifying_key,
+            // proving_key,
+            // verifying_key,
             rng
         );
 
         // build fee authorization
-        return Ok(authorization.to_string());
+        let execution_id = authorization.to_execution_id().map_err(|e| e.to_string())?;
+        let fee_authorization = build_public_fee_authorization!(
+            process,
+            private_key,
+            // fee_record,
+            fee_microcredits,
+            // node_url,
+            // fee_proving_key,
+            // fee_verifying_key,
+            execution_id,
+            rng
+        );
+
+        let authorizations_json =
+            serde_json::to_string(&[authorization, fee_authorization]).map_err(|e| e.to_string())?;
+        return Ok(authorizations_json);
     }
 }

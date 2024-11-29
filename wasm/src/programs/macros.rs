@@ -153,7 +153,7 @@ macro_rules! build_authorization {
 #[macro_export]
 macro_rules! build_public_fee_authorization {
     // ($process:expr, $private_key:expr, $fee_microcredits:expr, $submission_url:expr, $fee_proving_key:expr, $fee_verifying_key:expr, $execution_id:expr, $rng:expr, $offline_query:expr) => {{
-    ($process:expr, $private_key:expr, $fee_microcredits:expr, $submission_url:expr, $execution_id:expr, $rng:expr) => {{
+    ($process:expr, $private_key:expr, $fee_microcredits:expr, $execution_id:expr, $rng:expr) => {{
         // if (($fee_proving_key.is_some() && $fee_verifying_key.is_none())
         //     || ($fee_proving_key.is_none() && $fee_verifying_key.is_some()))
         // {

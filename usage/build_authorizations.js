@@ -19,16 +19,14 @@ const program_id = "son_program.aleo"
 const function_name = "call_father"
 const fee = 0.08133
 
-const keySearchParams = { cacheKey: `${program_id}:${function_name}` };
-console.log("Key search parameters set: ", keySearchParams);
+// const keySearchParams = { cacheKey: `${program_id}:${function_name}` };
+// console.log("Key search parameters set: ", keySearchParams);
 
 let authorizations_json = await programManager.buildAuthorizations({
     programName: program_id,
     functionName: function_name,
     fee: fee,
-    privateFee: false,
-    inputs: ["9u64"], // Inputs matching the function definition
-    keySearchParams: keySearchParams,
+    inputs: ["2u64"], // Inputs matching the function definition
 });
 
 console.log(`result: ${authorizations_json}`)
