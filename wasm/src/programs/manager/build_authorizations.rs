@@ -15,27 +15,18 @@ use std::str::FromStr;
 #[wasm_bindgen]
 impl ProgramManager {
     #[wasm_bindgen(js_name = buildAuthorizations)]
-    #[allow(clippy::too_many_arguments)]
     pub async fn build_authorizations(
         private_key: &PrivateKey,
         program: &str,
         function: &str,
         inputs: Array,
         fee_credits: f64,
-        // fee_record: Option<RecordPlaintext>,
-        // url: Option<String>,
         imports: Option<Object>,
-        // proving_key: Option<ProvingKey>,
-        // verifying_key: Option<VerifyingKey>,
-        // fee_proving_key: Option<ProvingKey>,
-        // fee_verifying_key: Option<VerifyingKey>,
-        // offline_query: Option<OfflineQuery>,
     ) -> Result<String, String> {
         log(&format!("Build authorization for function: {function}"));
         let fee_microcredits = (fee_credits * 1_000_000.0) as u64;
         let mut process_native = ProcessNative::load_web().map_err(|err| err.to_string())?;
         let process = &mut process_native;
-        // let node_url = url.as_deref().unwrap_or(DEFAULT_URL);
 
         log("Check program imports are valid and add them to the process");
         let program_native = ProgramNative::from_str(program).map_err(|e| e.to_string())?;
@@ -49,8 +40,6 @@ impl ProgramManager {
             program,
             function,
             private_key,
-            // proving_key,
-            // verifying_key,
             rng
         );
 
@@ -59,11 +48,7 @@ impl ProgramManager {
         let fee_authorization = build_public_fee_authorization!(
             process,
             private_key,
-            // fee_record,
             fee_microcredits,
-            // node_url,
-            // fee_proving_key,
-            // fee_verifying_key,
             execution_id,
             rng
         );

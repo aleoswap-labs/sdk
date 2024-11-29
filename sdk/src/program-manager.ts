@@ -339,7 +339,6 @@ class ProgramManager {
     async buildAuthorizations(options: ExecuteOptions): Promise<String> {
         // Destructure the options object to access the parameters
         const {
-            programName,
             functionName,
             fee,
             inputs,
@@ -347,17 +346,13 @@ class ProgramManager {
         } = options;
 
         let program = options.program;
-        let imports = options.imports;
+        let importPrograms = options.imports;
 
-        // Ensure the function exists on the network
-        if (program === undefined) {
-            try {
-                program = <string>(await this.networkClient.getProgram(programName));
-            } catch (e: any) {
-                logAndThrow(`Error finding ${programName}. Network response: '${e.message}'. Please ensure you're connected to a valid Aleo network the program is deployed to the network.`);
-            }
-        } else if (program instanceof Program) {
-            program = program.toString();
+        // Check the program
+        if (program instanceof Program) {
+            program = program.toString()
+        } else {
+            logAndThrow(`Error invalid program object. Not an instanceof Program`);
         }
 
         let executionPrivateKey = privateKey;
@@ -369,16 +364,6 @@ class ProgramManager {
             throw ("No private key provided and no private key set in the ProgramManager");
         }
 
-        // Resolve the program imports if they exist
-        const numberOfImports = Program.fromString(program).getImports().length;
-        if (numberOfImports > 0 && !imports) {
-            try {
-                imports = <ProgramImports>await this.networkClient.getProgramImports(programName);
-            } catch (e: any) {
-                logAndThrow(`Error finding program imports. Network response: '${e.message}'. Please ensure you're connected to a valid Aleo network and the program is deployed to the network.`);
-            }
-        }
-
         // Build authorizations
         return await WasmProgramManager.buildAuthorizations(
             executionPrivateKey,
@@ -386,7 +371,7 @@ class ProgramManager {
             functionName,
             inputs,
             fee,
-            imports
+            importPrograms
         );
     }
 
