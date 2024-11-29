@@ -47,5 +47,9 @@
     "@wasm-tool/rollup-plugin-rust": "^2.4.2",
     "rimraf": "^5.0.1",
     "rollup": "^3.27.2"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }
