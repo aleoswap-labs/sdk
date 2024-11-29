@@ -78,5 +78,9 @@
     "rollup-plugin-typescript2": "^0.36.0",
     "sinon": "^18.0.0",
     "typescript": "^5.2.2"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }
