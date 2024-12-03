@@ -2,14 +2,25 @@ import { Account, ProgramManager, AleoNetworkClient, initThreadPool } from "sdk"
 
 const privateKey = 'APrivateKey1zkp2mYusCV1g2GTYJ1DeUUa4Twgc5Vqh59jYnajJv3Foskv'
 const queryURL = "http://hk2-6.s.filfox.io:60053"
-const programId = "son_program.aleo"
-const functionName = "call_father"
+
+// const programId = "son_program.aleo"
+// const functionName = "call_father"
 // const programId = "father_program.aleo"
 // const functionName = "father_here"
 // const programId = "credits.aleo"
 // const functionName = "transfer_public"
-const inputs = ["4u64"];
-const fee = 0.08132
+// const inputs = ["4u64"];
+// const fee = 0.08132
+
+const programId = "waleo_v1x5.aleo"
+// function name
+const functionName = "wrap_public"
+// input params
+const inputs = [
+    "10u64",
+    "aleo1rpsftkqyqcehfnk5hjxq3ppp8dczf4nzx4snrhcgpv5kl9meauzsftf5rs",
+];
+const fee = 0.5
 
 await initThreadPool()
 

@@ -1,6 +1,6 @@
 {
   "name": "@zenox-labs/sdk",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Michael.W",
   "description": "A Software Development Kit (SDK) for Zero-Knowledge Transactions",
   "collaborators": [
@@ -48,7 +48,7 @@
   },
   "homepage": "https://github.com/aleoswap-labs/sdk#readme",
   "dependencies": {
-    "@zenox-labs/wasm": "0.0.1",
+    "@zenox-labs/wasm": "0.0.2",
     "comlink": "^4.4.1",
     "mime": "^3.0.0",
     "sync-request": "^6.1.0",
