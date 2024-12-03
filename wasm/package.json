@@ -1,6 +1,6 @@
 {
   "name": "@zenox-labs/wasm",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Michael.W",
   "description": "Wasm build for the SDK",
   "collaborators": [

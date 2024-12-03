@@ -34,25 +34,16 @@ impl ProgramManager {
         let rng = &mut StdRng::from_entropy();
 
         // build authorization
-        let authorization = build_authorization!(
-            process,
-            process_inputs!(inputs),
-            program,
-            function,
-            private_key,
-            rng
-        );
+        let mut authorization =
+            build_authorization!(process, process_inputs!(inputs), program, function, private_key, rng);
 
         // build fee authorization
         let execution_id = authorization.to_execution_id().map_err(|e| e.to_string())?;
-        let fee_authorization = build_public_fee_authorization!(
-            process,
-            private_key,
-            fee_microcredits,
-            execution_id,
-            rng
-        );
+        let fee_authorization =
+            build_public_fee_authorization!(process, private_key, fee_microcredits, execution_id, rng);
 
+        // sort transitions with the order of request's program id
+        authorization.sort_transitions();
         let authorizations_json =
             serde_json::to_string(&[authorization, fee_authorization]).map_err(|e| e.to_string())?;
         return Ok(authorizations_json);
